@@ -28,7 +28,7 @@ def main():
     wid = get_winid(window_name)
 
     if wid:
-        notify2.Notification("find chat window", "%s" % wid, "dialog-information").show()
+        notify2.Notification("find chat window", "%s" % wid, "qq.png").show()
     else:
         notify2.Notification("can not find chat window", "", "dialog-warning").show()
         sys.exit(1)
@@ -37,7 +37,7 @@ def main():
     window = dpy.create_resource_object('window', wid)
 
     data = ''
-    while(1):
+    while 1:
         try:
             raw = window.get_image(5, 260, 410, 110, X.ZPixmap, 0xffffffff)
         except error.BadDrawable:
@@ -48,9 +48,18 @@ def main():
             data = raw.data
             #msg_note = notify2.Notification("QQ message coming", "dialog-information")
             #msg_note.show()
-            notify2.Notification("QQ message coming", "", "dialog-information").show()
+            focused_id = dpy.get_input_focus()._data['focus'].id
+            if not wid == focused_id:
+                notify2.Notification("QQ message coming", "{}".format(datetime.today()), "/home/skt/.local/share/icons/qq.png").show()
+            else:
+                print("window active")
+                # notify2.Notification("QQ message coming", "", "dialog-warning").show()
+                pass
+        else:
+            # print("same")
+            pass
 
-        time.sleep(2)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()
